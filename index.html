@@ -3,41 +3,177 @@
 <head>
   <meta charset="utf-8">
   <meta content="width=device-width, initial-scale=1" name="viewport">
-  <title>Bugout chat tutorial</title>
-  
-<script src="https://chr15m.github.io/bugout/bugout.min.js"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Gidole&display=swap" rel="stylesheet">
+  <title>Balabum</title>
+  <script src="https://chr15m.github.io/bugout/bugout.min.js"></script>
+
   <style>
-    body { background-color: #333; font-size: 1.5em; padding: 0em 0.25em; }
+    body { background-color: #fff; font-size: 1.5em; padding: 0em 0.25em; }
     span { color: #fff; white-space: pre-wrap; word-wrap: break-word; text-shadow: 0 0 10px #ccc; }
+
+    *{
+        font-family: "Gidole", sans-serif;
+        font-weight: 400;
+        font-style: normal;
+    }
+
+    header{
+        -webkit-box-shadow: 1px 31px 18px -8px rgba(34, 60, 80, 0.2);
+        -moz-box-shadow: 1px 31px 18px -8px rgba(34, 60, 80, 0.2);
+        box-shadow: 1px 31px 18px -8px rgba(34, 60, 80, 0.2);
+        border-radius: 00px 0px 15px 15px;
+        justify-content: center;
+        text-align: center;
+    }
 
     #input { 
         border-bottom: 1px solid #ccc; 
         background-color: #383838; 
-        color: #fff;
+        color: #000;
         padding: 0.25em; outline: 0; 
         width: 200px; 
     }
+
+    #bottom-panel{
+        position: fixed;
+        bottom: 0px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        z-index: 20;
+        width: 100%;
+        left: 0px;
+        background-color: #ccc;
+        height: 50px;
+    }
+
+    #technical { 
+        border: 1px solid #757575; 
+        border-radius: 12px;
+        background-color: transparent; 
+        color: #000;
+        font-size: 20px;
+        padding: 0.25em; outline: 0; 
+        width: 200px; 
+        font-family: "Gidole", sans-serif;
+        font-weight: 100;
+        font-style: italic;
+    }
+
+    .messagebox {
+	padding: 10px 10px;
+	display: flex;
+	justify-content: flex-end;
+	flex-direction: column;
+	align-self: flex-end;
+  color: #000;
+}
+.inlineContainer {
+  display: inline-flex;
+  position: relative;
+}
+.inlineContainer.own {
+  flex-direction: row-reverse;
+}
+.inlineIcon {
+  width:20px;
+  object-fit: contain;
+}
+.ownBubble {
+	min-width: 60px;
+	max-width: 700px;
+	padding: 14px 18px;
+  margin: 6px 8px;
+	background-color: #5b5377;
+	border-radius: 16px 16px 0 16px;
+	border: 1px solid #443f56;
+ 
+}
+.otherBubble {
+	min-width: 60px;
+	max-width: 700px;
+	padding: 14px 18px;
+  margin: 6px 8px;
+	background-color: #6C8EA4;
+	border-radius: 16px 16px 16px 0;
+	border: 1px solid #54788e;
+  
+}
+.own {
+	align-self: flex-end;
+}
+.other {
+	align-self: flex-start;
+}
+span.own,
+span.other{
+  font-size: 14px;
+  color: grey;
+}
   </style>
   <script>
-    function log(message) {
-      document.getElementById("log").textContent += message + "\n";
+    function log(message, name) {
+        //b.send("Max? hi")
+      var newDiv = document.createElement("div");
+      let date = new Date();
+      newDiv.innerHTML = `
+      <div class="messagebox">
+		<div class="inlineContainer">
+			<img class="inlineIcon" src="//">
+            <h5 style="font-size: 12px; position: absolute; top: -30px; left: 33px;">${name}</h5>
+
+			<div class="otherBubble other">
+				${message}
+			</div>
+		</div><span class="other">${date.getHours()}:${date.getMinutes()}</span>
+	</div><br>`;
+    document.body.appendChild(newDiv);
+
+    }
+    function newuser(name) {
+      var newDiv = document.createElement("div");
+      newDiv.innerHTML = `
+      <br><span id="technical">${name}</span><br><br>`;
+    document.body.appendChild(newDiv);
+    }
+
+    function sendmes(){
+        let message = document.getElementById("message").value
+        b.send(message)
+        document.getElementById("message").value = ""
     }
   </script>
 </head>
 <body>
+<header style="position: fixed; left: 0px; width: 100%; height: 100px; background-color: #fff;">
+    <h3><i><font id="chat-title" style="font-size: 30px;">Тестовый ДеФи сервак</font></i>,<br><font id="chat-joins" style="font-size: 15px;">3 участника</font></h3>
+</header>
   <span id="log"></span>
-  <input id="input">
+  <br>
+  <br>
+  <br>
+  <br>
+  
+  <br id="ffff">
+  <div id="bottom-panel">
+    <input id="message" type="text" name="message" value="" size="40">
+    <button type="submit" onclick="sendmes()">Отправить</button>
+  </div>
+    
 </body>
 <script>
-  log("Hello world!");
+  log("Hello world!", "Curt");
  
 //   var b = Bugout();
-  var b = Bugout("bugout-chat-tutorial");
-  log(b.address() + " [ me ]");
+  var b = Bugout("themktest-chat-super-secret");
+  newuser("Вы присоединились");
+//   b.heartbeat(5);
 
-  b.on("seen", function(address) { log(address + " [ seen ]"); });
+  b.on("seen", function(address) { newuser(address + " присоединился"); });
   b.on("message", function(address, message) {
-    log(address + ": " + message);
+    log(message, address);
   });
 
 
